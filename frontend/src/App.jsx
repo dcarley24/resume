@@ -33,7 +33,9 @@ function App() {
   const fetchHistory = async () => {
     try {
       let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      if (!API_URL.startsWith('http')) {
+      if (API_URL && !API_URL.includes('localhost') && !API_URL.includes('.')) {
+        API_URL = `https://${API_URL}.onrender.com`;
+      } else if (!API_URL.startsWith('http')) {
         API_URL = `https://${API_URL}`;
       }
       setApiUrl(API_URL);
@@ -78,7 +80,9 @@ function App() {
 
     try {
       let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
-      if (!API_URL.startsWith('http')) {
+      if (API_URL && !API_URL.includes('localhost') && !API_URL.includes('.')) {
+        API_URL = `https://${API_URL}.onrender.com`;
+      } else if (!API_URL.startsWith('http')) {
         API_URL = `https://${API_URL}`;
       }
       const response = await fetch(`${API_URL}/optimize`, {
