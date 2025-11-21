@@ -27,17 +27,28 @@ function App() {
     }
   };
 
+  const [connectionStatus, setConnectionStatus] = useState('checking');
+  const [apiUrl, setApiUrl] = useState('');
+
   const fetchHistory = async () => {
     try {
       let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
       if (!API_URL.startsWith('http')) {
         API_URL = `https://${API_URL}`;
       }
+      setApiUrl(API_URL);
+
       const response = await fetch(`${API_URL}/history/${currentUser}`);
+      if (response.ok) {
+        setConnectionStatus('connected');
+      } else {
+        setConnectionStatus('error');
+      }
       const data = await response.json();
       setHistory(data.reverse()); // Newest first
     } catch (error) {
       console.error("Failed to fetch history:", error);
+      setConnectionStatus('error');
     }
   };
 
@@ -121,6 +132,9 @@ function App() {
           >
             History
           </button>
+          <div style={{ fontSize: '0.8rem', color: connectionStatus === 'connected' ? 'var(--success)' : 'var(--error)', marginRight: '1rem' }}>
+            {connectionStatus === 'connected' ? '● Online' : `● Offline (${apiUrl})`}
+          </div>
           <UserSelector currentUser={currentUser} onUserChange={setCurrentUser} />
         </div>
       </header>
