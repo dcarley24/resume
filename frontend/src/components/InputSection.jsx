@@ -21,7 +21,10 @@ const InputSection = ({
         formData.append('type', type);
 
         try {
-            const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+            if (!API_URL.startsWith('http')) {
+                API_URL = `https://${API_URL}`;
+            }
             const response = await fetch(`${API_URL}/upload`, {
                 method: 'POST',
                 body: formData,

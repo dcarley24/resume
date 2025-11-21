@@ -29,7 +29,10 @@ function App() {
 
   const fetchHistory = async () => {
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      if (!API_URL.startsWith('http')) {
+        API_URL = `https://${API_URL}`;
+      }
       const response = await fetch(`${API_URL}/history/${currentUser}`);
       const data = await response.json();
       setHistory(data.reverse()); // Newest first
@@ -63,7 +66,10 @@ function App() {
     setIsOptimizing(true);
 
     try {
-      const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      let API_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000';
+      if (!API_URL.startsWith('http')) {
+        API_URL = `https://${API_URL}`;
+      }
       const response = await fetch(`${API_URL}/optimize`, {
         method: 'POST',
         headers: {
